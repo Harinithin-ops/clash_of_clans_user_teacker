@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clash Insight | Live War Tracker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Geist:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#5700c9",
+                    "surface-container-low": "#151d1e",
+                    "surface-bright": "#333b3b",
+                    "surface-container-lowest": "#080f10",
+                    "surface-container-highest": "#2e3637",
+                    "outline-variant": "#3a494b",
+                    "on-tertiary-container": "#755d00",
+                    "tertiary": "#fff6e9",
+                    "secondary": "#d1bcff",
+                    "primary-fixed": "#74f5ff",
+                    "primary-container": "#00f2ff",
+                    "inverse-primary": "#00696f",
+                    "tertiary-fixed": "#ffe08b",
+                    "on-secondary": "#3c0090",
+                    "on-primary-container": "#006a71",
+                    "error": "#ffb4ab",
+                    "surface-tint": "#00dbe7",
+                    "on-secondary-fixed": "#23005b",
+                    "secondary-fixed-dim": "#d1bcff",
+                    "surface-dim": "#0d1515",
+                    "surface": "#0d1515",
+                    "on-secondary-container": "#ddcdff",
+                    "on-primary-fixed-variant": "#004f54",
+                    "surface-container": "#192122",
+                    "surface-container-high": "#232b2c",
+                    "inverse-surface": "#dce4e4",
+                    "surface-variant": "#2e3637",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed-dim": "#00dbe7",
+                    "background": "#0d1515",
+                    "on-tertiary": "#3d2f00",
+                    "on-surface": "#dce4e4",
+                    "tertiary-fixed-dim": "#f1c100",
+                    "on-tertiary-fixed-variant": "#584400",
+                    "on-primary-fixed": "#002022",
+                    "secondary-fixed": "#e9ddff",
+                    "error-container": "#93000a",
+                    "secondary-container": "#7000ff",
+                    "on-error": "#690005",
+                    "primary": "#e1fdff",
+                    "outline": "#849495",
+                    "tertiary-container": "#ffd761",
+                    "on-tertiary-fixed": "#241a00",
+                    "on-primary": "#00363a",
+                    "on-background": "#dce4e4",
+                    "inverse-on-surface": "#2a3232",
+                    "on-surface-variant": "#b9cacb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "48px",
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "bento-gap": "16px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "stat-value": ["Space Grotesk"],
+                    "headline-lg": ["Space Grotesk"],
+                    "display-hero": ["Space Grotesk"],
+                    "code-label": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Space Grotesk"],
+                    "body-main": ["Geist"]
+            },
+            "fontSize": {
+                    "stat-value": ["24px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "code-label": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-main": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .pro-card {
+            border: 1px solid #ffcc00;
+            background: linear-gradient(135deg, rgba(255, 204, 0, 0.05) 0%, rgba(15, 23, 42, 0.6) 100%);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 20px rgba(0, 219, 231, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-main selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col overflow-x-hidden">
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 w-full z-50 bg-surface/60 backdrop-blur-xl border-b border-white/10 shadow-[0_0_20px_rgba(0,219,231,0.1)] flex justify-between items-center px-margin-desktop h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="font-display-hero text-headline-lg-mobile tracking-tighter bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Clash Insight</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant hover:text-primary transition-all font-code-label text-code-label uppercase" href="#">Overview</a>
+<a class="text-primary border-b-2 border-primary transition-all font-code-label text-code-label uppercase" href="#">Live Stats</a>
+<a class="text-on-surface-variant hover:text-primary transition-all font-code-label text-code-label uppercase" href="#">Clan War</a>
+<a class="text-on-surface-variant hover:text-primary transition-all font-code-label text-code-label uppercase" href="#">Meta</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group hidden lg:block">
+<input class="bg-transparent border border-outline-variant rounded-full px-4 py-1 text-code-label font-code-label focus:border-primary focus:ring-0 focus:shadow-[0_0_15px_rgba(0,219,231,0.4)] transition-all w-64" placeholder="SEARCH PLAYER OR CLAN..." type="text"/>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-all">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-all">settings</span>
+<img alt="Pro Analyst Profile" class="w-8 h-8 rounded-full border border-primary scale-105 transition-transform" data-alt="A professional portrait of a tech-savvy esports analyst in a darkened studio environment. The individual is wearing sleek, modern tactical streetwear and glasses that reflect a digital blue HUD. The lighting is low-key with sharp cyan and magenta edge lights, creating a high-contrast, cyberpunk aesthetic. The background features blurred high-end server racks and glowing digital monitors displaying complex game data." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN6Zh2w4P0TRqlm2zlRgDO7EtHbsXIYVENfto2UkcWZW1Nkpcpps6Q2WRbHUJWEprrY6YVi0vXqz-4xwWkHiZab_dFDbnNBdjCyPgnmwQ_g_GahQYEBEqapCk4LQ9A6N1k1RKJCea9Z8u-JoDvkbyOb3oA6-McvU9r2DFG4yqmD35g46Q9feXbzXr1rmgPNckCeexcUfYTcXWvRb6lqADwvCvzlzphjfinPnfVZfYGhf3DFK8u6iTAkHQdR7vtU6sD-7sh5XQtxX-2"/>
+</div>
+</header>
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-surface-container/60 backdrop-blur-xl border-r border-white/10 hidden md:flex flex-col py-6 gap-2">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center text-on-primary-container font-bold">EL</div>
+<div>
+<div class="font-headline-lg-mobile text-[14px] text-primary">Elite League</div>
+<div class="font-code-label text-[10px] text-on-surface-variant uppercase">Season 24</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-code-label text-code-label uppercase">Overview</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-code-label text-code-label uppercase">Army Meta</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined">swords</span>
+<span class="font-code-label text-code-label uppercase">Clan War</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 bg-gradient-to-r from-primary/20 to-secondary/20 border-r-2 border-primary text-primary transition-all translate-x-1" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="font-code-label text-code-label uppercase">Live Stats</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="font-code-label text-code-label uppercase">Leaderboards</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full py-3 bg-gradient-to-r from-primary-fixed-dim to-secondary-fixed-dim text-on-secondary font-bold font-code-label uppercase rounded-lg hover:scale-[1.02] transition-transform flex items-center justify-center gap-2 glow-cyan">
+<span class="material-symbols-outlined text-[18px]">upgrade</span> Upgrade Pro
+            </button>
+</div>
+<div class="mt-4 pt-4 border-t border-white/5 space-y-1">
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-code-label text-code-label uppercase">Support</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-code-label text-code-label uppercase">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="md:ml-64 mt-16 flex-1 px-margin-mobile md:px-margin-desktop py-8 bg-background relative overflow-hidden">
+<!-- Background Glows -->
+<div class="absolute -top-48 -right-48 w-96 h-96 bg-primary/10 blur-[120px] rounded-full pointer-events-none"></div>
+<div class="absolute top-1/2 -left-48 w-96 h-96 bg-secondary/10 blur-[120px] rounded-full pointer-events-none"></div>
+<section class="max-w-7xl mx-auto space-y-gutter">
+<!-- Live Header Scoreboard -->
+<div class="glass-card rounded-xl p-8 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+<div class="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+<!-- Clan A -->
+<div class="flex items-center gap-6 flex-1 justify-end text-right">
+<div>
+<h2 class="font-headline-lg-mobile text-primary uppercase">Elite League</h2>
+<p class="font-code-label text-on-surface-variant">LEVEL 24 • #PQ98RR2</p>
+</div>
+<div class="w-20 h-20 bg-surface-container rounded-xl flex items-center justify-center border border-white/10">
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+</div>
+<!-- VS Core -->
+<div class="flex flex-col items-center px-8 border-x border-white/10 min-w-[240px]">
+<div class="flex items-center gap-3 mb-2">
+<span class="w-2 h-2 bg-error rounded-full animate-pulse"></span>
+<span class="font-code-label text-error uppercase tracking-widest">War in Progress</span>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<span class="font-display-hero text-6xl text-white">42</span>
+<span class="font-display-hero text-2xl text-on-surface-variant mt-4">VS</span>
+<span class="font-display-hero text-6xl text-white">39</span>
+</div>
+<div class="text-center">
+<p class="font-code-label text-on-surface-variant uppercase mb-1">Time Remaining</p>
+<div class="font-stat-value text-primary tracking-widest text-3xl">04:12:38</div>
+</div>
+</div>
+<!-- Clan B -->
+<div class="flex items-center gap-6 flex-1">
+<div class="w-20 h-20 bg-surface-container rounded-xl flex items-center justify-center border border-white/10">
+<span class="material-symbols-outlined text-4xl text-secondary" style="font-variation-settings: 'FILL' 1;">swords</span>
+</div>
+<div>
+<h2 class="font-headline-lg-mobile text-secondary uppercase">Iron Vanguard</h2>
+<p class="font-code-label text-on-surface-variant">LEVEL 21 • #88LLPP9</p>
+</div>
+</div>
+</div>
+<!-- Destruction Meters -->
+<div class="mt-8 grid grid-cols-2 gap-12">
+<div class="space-y-2">
+<div class="flex justify-between font-code-label uppercase">
+<span class="text-primary">94.2% Total Destruction</span>
+<span class="text-on-surface-variant">22/30 Attacks</span>
+</div>
+<div class="h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary glow-cyan w-[94.2%] transition-all"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-code-label uppercase">
+<span class="text-on-surface-variant">25/30 Attacks</span>
+<span class="text-secondary">88.7% Total Destruction</span>
+</div>
+<div class="h-2 bg-surface-container rounded-full overflow-hidden flex justify-end">
+<div class="h-full bg-secondary w-[88.7%] transition-all"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Dashboard Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-bento-gap">
+<!-- Strategic Recommendation -->
+<div class="md:col-span-4 pro-card rounded-xl p-6 flex flex-col">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-tertiary-fixed">psychology</span>
+<h3 class="font-code-label text-tertiary-fixed uppercase">Strategic Insights</h3>
+</div>
+<div class="flex-1 space-y-4">
+<div class="p-4 bg-white/5 rounded-lg border border-tertiary-fixed/20">
+<p class="font-code-label text-tertiary-fixed mb-1 uppercase text-[10px]">Enemy #4 Vulnerability</p>
+<p class="text-body-main text-on-surface">Multiple air defenses clustered near the town hall. Recommend **Symmetry Electro-Dragon** pathing for high-value core destruction.</p>
+</div>
+<div class="p-4 bg-white/5 rounded-lg border border-white/5">
+<p class="font-code-label text-on-surface-variant mb-1 uppercase text-[10px]">War Trend</p>
+<p class="text-body-main text-on-surface">Enemy using heavy hybrid attacks. Focus defensive donations on Super Minions and Rocket Balloons.</p>
+</div>
+</div>
+<button class="mt-6 w-full py-3 border border-tertiary-fixed text-tertiary-fixed font-code-label uppercase text-[12px] hover:bg-tertiary-fixed/10 transition-colors">
+                        View Weakness Heatmap
+                    </button>
+</div>
+<!-- Live Attack Timeline -->
+<div class="md:col-span-8 glass-card rounded-xl p-6">
+<div class="flex justify-between items-center mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">history</span>
+<h3 class="font-code-label text-primary uppercase">Live Attack Timeline</h3>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container text-primary font-code-label text-[10px] rounded uppercase">All</span>
+<span class="px-3 py-1 bg-transparent text-on-surface-variant font-code-label text-[10px] rounded uppercase hover:bg-white/5 cursor-pointer">Three Stars</span>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Timeline Item -->
+<div class="flex items-center gap-6 p-4 rounded-lg bg-surface-container/50 border border-white/5 group hover:border-primary/30 transition-all">
+<div class="font-code-label text-on-surface-variant text-[12px]">2M AGO</div>
+<div class="flex-1 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-primary/20 flex items-center justify-center font-bold text-primary">#12</div>
+<div>
+<p class="font-headline-lg-mobile text-[16px] text-white">Ghost_Warrior</p>
+<p class="font-code-label text-[10px] text-on-surface-variant uppercase">Attacked #8 Iron_King</p>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="flex flex-col items-center">
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-code-label text-primary text-[10px]">100%</span>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-all">play_circle</button>
+</div>
+</div>
+</div>
+<!-- Timeline Item -->
+<div class="flex items-center gap-6 p-4 rounded-lg bg-surface-container/50 border border-white/5 group hover:border-primary/30 transition-all">
+<div class="font-code-label text-on-surface-variant text-[12px]">8M AGO</div>
+<div class="flex-1 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-secondary/20 flex items-center justify-center font-bold text-secondary">#2</div>
+<div>
+<p class="font-headline-lg-mobile text-[16px] text-white">Shadow_Reaper</p>
+<p class="font-code-label text-[10px] text-on-surface-variant uppercase">Attacked #1 MasterMind</p>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="flex flex-col items-center">
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-secondary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-on-surface-variant/20 text-[20px]">star</span>
+</div>
+<span class="font-code-label text-secondary text-[10px]">82%</span>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-all">play_circle</button>
+</div>
+</div>
+</div>
+<!-- Timeline Item -->
+<div class="flex items-center gap-6 p-4 rounded-lg bg-surface-container/50 border border-white/5 group hover:border-primary/30 transition-all">
+<div class="font-code-label text-on-surface-variant text-[12px]">15M AGO</div>
+<div class="flex-1 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-primary/20 flex items-center justify-center font-bold text-primary">#5</div>
+<div>
+<p class="font-headline-lg-mobile text-[16px] text-white">Vortex_Elite</p>
+<p class="font-code-label text-[10px] text-on-surface-variant uppercase">Attacked #4 Iron_Sledge</p>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="flex flex-col items-center">
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-code-label text-primary text-[10px]">100%</span>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-all">play_circle</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Top Performer Spotlight -->
+<div class="md:col-span-12 lg:col-span-5 glass-card rounded-xl overflow-hidden group">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A cinematic, high-fantasy digital illustration of a heroic fantasy warrior standing atop a mountain of glowing crystal shards. The character is bathed in intense cyan and purple ambient light from a swirling cosmic sky. In the background, a futuristic fortress under siege glows with orange fires and neon energy beams. The mood is epic and triumphant, reflecting a high-performance gaming achievement in a dark, stylized esports aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4oEvF-bnZfhOFOyhEpkhozZoN7qJuXGN-NCpjO_-jqb-YCzgQZ8QaA8Xf8_hd58VEJWlBjmmW_92_cQdqWfDi70ZlH7csTicJgZEgpQOTmvurX-O8HvQUB-EHreN-LOGmutgCAeOpggbSdU35Zc5SR-4ca_6PiV_ykynfmG0A7v_H7kWVpvRoSwU1mYLvq33aUeUFCw45IYIy_v32sa2f9ohrJv9rCONTfHVlXuY73B8rA7PwpBaFSdy4_Qxtk5qop3Ov7phx_yvL"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="px-3 py-1 bg-primary text-on-primary font-code-label text-[10px] uppercase rounded-full mb-2 inline-block">Top War Performer</span>
+<h4 class="font-display-hero text-headline-lg-mobile text-white">Ghost_Warrior</h4>
+</div>
+</div>
+<div class="p-6 grid grid-cols-3 gap-4 border-t border-white/5">
+<div class="text-center border-r border-white/5">
+<p class="font-code-label text-on-surface-variant text-[10px] uppercase mb-1">Stars</p>
+<p class="font-stat-value text-primary text-2xl">6</p>
+</div>
+<div class="text-center border-r border-white/5">
+<p class="font-code-label text-on-surface-variant text-[10px] uppercase mb-1">Destruction</p>
+<p class="font-stat-value text-primary text-2xl">200%</p>
+</div>
+<div class="text-center">
+<p class="font-code-label text-on-surface-variant text-[10px] uppercase mb-1">MVP Score</p>
+<p class="font-stat-value text-primary text-2xl">9.8</p>
+</div>
+</div>
+</div>
+<!-- Live Metrics Grid -->
+<div class="md:col-span-12 lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-bento-gap">
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-primary mb-2">person_pin</span>
+<p class="font-code-label text-on-surface-variant text-[10px] uppercase">Active Attacks</p>
+<p class="font-stat-value text-2xl">2</p>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-secondary mb-2">groups</span>
+<p class="font-code-label text-on-surface-variant text-[10px] uppercase">Available Hits</p>
+<p class="font-stat-value text-2xl">8</p>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-primary mb-2">hotel_class</span>
+<p class="font-code-label text-on-surface-variant text-[10px] uppercase">Triple Rate</p>
+<p class="font-stat-value text-2xl">64%</p>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center text-center border-primary/40">
+<span class="material-symbols-outlined text-primary mb-2 animate-pulse">monitoring</span>
+<p class="font-code-label text-on-surface-variant text-[10px] uppercase">Win Chance</p>
+<p class="font-stat-value text-primary text-2xl">72%</p>
+</div>
+<!-- Meta Trends Small Card -->
+<div class="col-span-2 glass-card rounded-xl p-4">
+<h5 class="font-code-label text-[10px] text-on-surface-variant uppercase mb-3 flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-secondary rounded-full"></span> Enemy Defensive Meta
+                        </h5>
+<div class="flex gap-4">
+<div class="flex-1 h-12 bg-surface-container rounded-lg flex items-center justify-center border border-white/5">
+<span class="material-symbols-outlined text-secondary mr-2">air</span>
+<span class="font-code-label text-[10px]">ANTI-AIR</span>
+</div>
+<div class="flex-1 h-12 bg-surface-container rounded-lg flex items-center justify-center border border-white/5">
+<span class="material-symbols-outlined text-secondary mr-2">castle</span>
+<span class="font-code-label text-[10px]">BOX BASE</span>
+</div>
+</div>
+</div>
+<!-- Donation Stats -->
+<div class="col-span-2 glass-card rounded-xl p-4">
+<h5 class="font-code-label text-[10px] text-on-surface-variant uppercase mb-3 flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span> Defensive Fill Status
+                        </h5>
+<div class="flex items-center gap-4">
+<div class="flex-1">
+<div class="flex justify-between font-code-label text-[10px] mb-1">
+<span>FILL LEVEL</span>
+<span>28/30</span>
+</div>
+<div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[93%]"></div>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Shell -->
+<footer class="w-full py-8 mt-auto bg-surface-container-lowest border-t border-outline-variant flex flex-col md:flex-row justify-between items-center px-margin-desktop gap-gutter">
+<div class="flex flex-col gap-1">
+<span class="font-headline-lg text-primary text-[24px]">Clash Insight</span>
+<p class="font-body-main text-on-surface-variant text-[14px]">© 2024 Clash Insight Analytics. Data-driven tactical advantage.</p>
+</div>
+<nav class="flex gap-8">
+<a class="font-body-main text-on-surface-variant hover:text-secondary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-main text-on-surface-variant hover:text-secondary transition-colors" href="#">Terms of Service</a>
+<a class="font-body-main text-on-surface-variant hover:text-secondary transition-colors" href="#">API Status</a>
+<a class="font-body-main text-on-surface-variant hover:text-secondary transition-colors" href="#">Global Rankings</a>
+</nav>
+</footer>
+</body></html>

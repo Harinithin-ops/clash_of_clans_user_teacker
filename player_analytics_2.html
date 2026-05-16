@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clash Insight | Player Analytics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Geist:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#5700c9",
+                        "surface-container-low": "#151d1e",
+                        "surface-bright": "#333b3b",
+                        "surface-container-lowest": "#080f10",
+                        "surface-container-highest": "#2e3637",
+                        "outline-variant": "#3a494b",
+                        "on-tertiary-container": "#755d00",
+                        "tertiary": "#fff6e9",
+                        "secondary": "#d1bcff",
+                        "primary-fixed": "#74f5ff",
+                        "primary-container": "#00f2ff",
+                        "inverse-primary": "#00696f",
+                        "tertiary-fixed": "#ffe08b",
+                        "on-secondary": "#3c0090",
+                        "on-primary-container": "#006a71",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#00dbe7",
+                        "on-secondary-fixed": "#23005b",
+                        "secondary-fixed-dim": "#d1bcff",
+                        "surface-dim": "#0d1515",
+                        "surface": "#0d1515",
+                        "on-secondary-container": "#ddcdff",
+                        "on-primary-fixed-variant": "#004f54",
+                        "surface-container": "#192122",
+                        "surface-container-high": "#232b2c",
+                        "inverse-surface": "#dce4e4",
+                        "surface-variant": "#2e3637",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#00dbe7",
+                        "background": "#0d1515",
+                        "on-tertiary": "#3d2f00",
+                        "on-surface": "#dce4e4",
+                        "tertiary-fixed-dim": "#f1c100",
+                        "on-tertiary-fixed-variant": "#584400",
+                        "on-primary-fixed": "#002022",
+                        "secondary-fixed": "#e9ddff",
+                        "error-container": "#93000a",
+                        "secondary-container": "#7000ff",
+                        "on-error": "#690005",
+                        "primary": "#e1fdff",
+                        "outline": "#849495",
+                        "tertiary-container": "#ffd761",
+                        "on-tertiary-fixed": "#241a00",
+                        "on-primary": "#00363a",
+                        "on-background": "#dce4e4",
+                        "inverse-on-surface": "#2a3232",
+                        "on-surface-variant": "#b9cacb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "48px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "bento-gap": "16px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "stat-value": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "display-hero": ["Space Grotesk"],
+                        "code-label": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Space Grotesk"],
+                        "body-main": ["Geist"]
+                    },
+                    "fontSize": {
+                        "stat-value": ["24px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "code-label": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-main": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0d1515;
+            color: #dce4e4;
+            font-family: 'Geist', sans-serif;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .pro-card {
+            border: 1px solid #ffcc00;
+            background: linear-gradient(135deg, rgba(255, 204, 0, 0.05), rgba(15, 23, 42, 0.6));
+        }
+        .neon-glow-primary:hover {
+            box-shadow: 0 0 20px rgba(0, 219, 231, 0.4);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/60 backdrop-blur-xl border-b border-white/10 shadow-[0_0_20px_rgba(0,219,231,0.1)] flex justify-between items-center px-margin-desktop h-16">
+<div class="flex items-center gap-8">
+<span class="font-display-hero text-headline-lg-mobile tracking-tighter bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Clash Insight</span>
+<div class="hidden md:flex gap-6">
+<a class="font-code-label text-code-label uppercase text-on-surface-variant hover:text-primary hover:shadow-[0_0_15px_rgba(0,219,231,0.4)] transition-all duration-300" href="#">Overview</a>
+<a class="font-code-label text-code-label uppercase text-primary border-b-2 border-primary scale-105 transition-transform" href="#">Army Meta</a>
+<a class="font-code-label text-code-label uppercase text-on-surface-variant hover:text-primary hover:shadow-[0_0_15px_rgba(0,219,231,0.4)] transition-all duration-300" href="#">Clan War</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="bg-transparent border border-outline-variant rounded-full pl-10 pr-4 py-1 text-sm focus:border-primary-container focus:ring-0 transition-all duration-300 w-64" placeholder="Search Player Tag..." type="text"/>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">settings</span>
+<img alt="Pro Analyst Profile" class="w-8 h-8 rounded-full border border-primary/50" data-alt="A professional high-resolution avatar of a futuristic esports analyst wearing sleek tactical gear and glowing cybernetic eyewear. The portrait is set against a dark, tech-infused background with soft cyan and violet highlights, reflecting a premium gaming aesthetic. The lighting is cinematic, focusing on detailed facial features and a sharp, focused expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDArTgiP8qnjWfr8iNC_3HqGc-D0YVDoNbZcTJHBZfS0mcU3A07L8fzOX0oN08AOhZDh_C33USLeWS4-avm0ytffM6x69R0eVClOU9upiMXpjg9L7zs9KwWTiakULJTPGLTtf6GVaRj-IiiOk8N1ZmmObnCgX38mmSiSNR33DvJYdYf8SQtMpjO5W5c-DMS407zjyU2x5xNXeYC-jpACNcIzwDciYkW09q3A1bFqvcMLQZTiKXm3oeFg7F6SzrPw1mpfL_ApQAX6T59"/>
+</div>
+</nav>
+<!-- SideNavBar (Hidden on Mobile) -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-surface-container/60 backdrop-blur-xl border-r border-white/10 hidden md:flex flex-col py-6 gap-2">
+<div class="px-6 mb-6">
+<div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
+<img alt="Clan Emblem" class="w-10 h-10 rounded-lg" data-alt="A highly detailed 3D metallic clan emblem featuring a stylized dragon head with glowing neon blue eyes. The emblem is rendered in a dark obsidian finish with sharp gold accents, floating in a digital void. The surrounding atmosphere is filled with subtle data particles and holographic projections, emphasizing an elite, tech-centric clan identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgzvSkU1-F_YoTOpqeiapkqqP4emtsqqc76dbO-38i0Ap4I5oU7gS44BWRWMpBFiaShCUhDMRgBAsKpljB-IvqjhjuXkhhAVjnrU1Ou8Oh0cr3pXthpND8B9J78Ivv8dyY96n9AVnaEyBOku6V72GG-KkvO68qEZfJvNIBfxoTfKohCOOOLb__JrJQSi0DIhVb48EEnl2DaQuAGHQ4MMBmOsRoTez3KJNOku9lHeB39Fe7epanw-SufaBXCNhKGjZDlToPv4KcEgFC"/>
+<div>
+<h4 class="font-headline-lg-mobile text-[14px] leading-tight text-on-surface">Elite League</h4>
+<p class="font-code-label text-[10px] text-on-surface-variant">Season 24</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-1 px-3">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">dashboard</span>
+<span class="font-code-label text-code-label uppercase">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-primary/20 to-secondary/20 border-r-2 border-primary text-primary translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-code-label text-code-label uppercase">Army Meta</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">swords</span>
+<span class="font-code-label text-code-label uppercase">Clan War</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">query_stats</span>
+<span class="font-code-label text-code-label uppercase">Live Stats</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">emoji_events</span>
+<span class="font-code-label text-code-label uppercase">Leaderboards</span>
+</a>
+</div>
+<div class="mt-auto px-6 space-y-4">
+<button class="w-full py-3 rounded-lg bg-gradient-to-r from-primary-container to-secondary text-on-primary-container font-code-label uppercase text-[12px] font-bold tracking-widest hover:scale-[1.02] transition-transform">Upgrade Pro</button>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span class="font-code-label text-[11px] uppercase">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+<span class="font-code-label text-[11px] uppercase">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="mt-16 md:ml-64 p-gutter flex-1">
+<!-- Player Header Card -->
+<header class="mb-8 relative overflow-hidden glass-card rounded-2xl p-8 flex flex-col md:flex-row gap-8 items-center md:items-start">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -mr-32 -mt-32"></div>
+<div class="relative">
+<img alt="ShadowReaper Avatar" class="w-32 h-32 rounded-2xl border-2 border-primary-container shadow-[0_0_30px_rgba(0,219,231,0.3)]" data-alt="A macro close-up of a high-tech robotic warrior helmet with glowing cyan optics and dark carbon fiber textures. The character has a menacing yet professional presence, perfectly fitting the 'ShadowReaper' alias. The surrounding atmosphere is filled with subtle blue smoke and digital lens flares, reflecting an elite player's high-tier status in a competitive gaming environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANjB2R2-43UVyhhUxQV2ZnhmR-mBxWOX7fi5btjrxYYJTbALz2Gb_DDS0n8AceD7jWNsufwvSHoctMor__N4UvxDMOoXEqP3frhAc4wr27bAshtIY00D4j1NQe-BRFWoIFrY9ypQqx7QkUmDXor5ba8u7FbldhSoxWnrDz9XQgHFdB9AkTG7dkjylzrZ9wEaatfpqVdUf8XnRznJO7DyVh4HC7eEC0k9RI6lDKlQCraLKb4LCmKnndfrvW92FbZL87foejisIkBnLI"/>
+<div class="absolute -bottom-3 -right-3 bg-secondary p-2 rounded-lg shadow-xl">
+<span class="material-symbols-outlined text-on-secondary font-bold">military_tech</span>
+</div>
+</div>
+<div class="flex-1 text-center md:text-left">
+<div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface tracking-tight">ShadowReaper <span class="text-primary-container/60 font-code-label text-body-main">#P89G2RC0</span></h1>
+<span class="px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-full font-code-label text-[10px] tracking-widest self-center md:self-auto">TOWN HALL 16</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+<div class="space-y-1">
+<p class="font-code-label text-on-surface-variant uppercase text-[10px]">Current League</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<p class="font-stat-value text-stat-value text-primary">Legend League</p>
+</div>
+</div>
+<div class="space-y-1">
+<p class="font-code-label text-on-surface-variant uppercase text-[10px]">Trophies</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">trophy</span>
+<p class="font-stat-value text-stat-value text-secondary">5,842</p>
+</div>
+</div>
+<div class="space-y-1">
+<p class="font-code-label text-on-surface-variant uppercase text-[10px]">All-Time Best</p>
+<p class="font-stat-value text-stat-value text-on-surface">6,120</p>
+</div>
+<div class="space-y-1">
+<p class="font-code-label text-on-surface-variant uppercase text-[10px]">War Stars</p>
+<p class="font-stat-value text-stat-value text-tertiary-fixed-dim">2,481</p>
+</div>
+</div>
+</div>
+<div class="flex md:flex-col gap-3">
+<button class="p-3 glass-card rounded-xl hover:text-primary transition-colors"><span class="material-symbols-outlined">share</span></button>
+<button class="p-3 glass-card rounded-xl hover:text-primary transition-colors"><span class="material-symbols-outlined">bookmark</span></button>
+<button class="p-3 glass-card rounded-xl hover:text-primary transition-colors"><span class="material-symbols-outlined">refresh</span></button>
+</div>
+</header>
+<!-- Bento Grid Section -->
+<div class="bento-grid">
+<!-- Trophy History Chart -->
+<section class="col-span-12 lg:col-span-8 glass-card rounded-2xl p-6 h-[400px] flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-lg-mobile text-[18px] text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">show_chart</span>
+                        Trophy History
+                    </h3>
+<div class="flex gap-2">
+<button class="px-3 py-1 font-code-label text-[10px] rounded bg-white/10 text-on-surface">7D</button>
+<button class="px-3 py-1 font-code-label text-[10px] rounded text-on-surface-variant hover:bg-white/5">30D</button>
+<button class="px-3 py-1 font-code-label text-[10px] rounded text-on-surface-variant hover:bg-white/5">ALL</button>
+</div>
+</div>
+<div class="flex-1 flex items-end gap-1 px-2">
+<!-- Faux Line Chart Visualization -->
+<div class="w-full h-full relative border-l border-b border-white/5">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 300">
+<defs>
+<lineargradient id="gradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:rgba(0,219,231,0.4);stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:rgba(0,219,231,0);stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,250 Q100,230 200,245 T400,180 T600,200 T800,120 T1000,140 V300 H0 Z" fill="url(#gradient)"></path>
+<path d="M0,250 Q100,230 200,245 T400,180 T600,200 T800,120 T1000,140" fill="none" stroke="#00dbe7" stroke-width="3"></path>
+<circle class="animate-pulse" cx="800" cy="120" fill="#00dbe7" r="5"></circle>
+</svg>
+<div class="absolute bottom-0 left-0 w-full flex justify-between px-2 pt-2 font-code-label text-[10px] text-on-surface-variant">
+<span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Active Performance Bento -->
+<section class="col-span-12 lg:col-span-4 glass-card rounded-2xl p-6 flex flex-col gap-4">
+<h3 class="font-headline-lg-mobile text-[18px] text-on-surface">Live Performance</h3>
+<div class="grid grid-cols-2 gap-4 flex-1">
+<div class="glass-card rounded-xl p-4 flex flex-col justify-between border-primary/20">
+<span class="material-symbols-outlined text-primary">target</span>
+<div>
+<p class="font-stat-value text-stat-value text-primary">94%</p>
+<p class="font-code-label text-[10px] uppercase text-on-surface-variant">Avg Stars</p>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col justify-between border-secondary/20">
+<span class="material-symbols-outlined text-secondary">flash_on</span>
+<div>
+<p class="font-stat-value text-stat-value text-secondary">2.8m</p>
+<p class="font-code-label text-[10px] uppercase text-on-surface-variant">Daily Loot</p>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col justify-between">
+<span class="material-symbols-outlined text-error">trending_down</span>
+<div>
+<p class="font-stat-value text-stat-value text-error">-12</p>
+<p class="font-code-label text-[10px] uppercase text-on-surface-variant">Def Loss</p>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col justify-between">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant">timer</span>
+<div>
+<p class="font-stat-value text-stat-value text-on-tertiary-fixed-variant">1.4h</p>
+<p class="font-code-label text-[10px] uppercase text-on-surface-variant">Active Play</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Army Arsenal Tabs -->
+<section class="col-span-12 glass-card rounded-2xl overflow-hidden">
+<div class="border-b border-white/10 px-8 py-4 bg-white/5 flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">swords</span>
+<h2 class="font-headline-lg-mobile text-[20px] text-on-surface">Army Arsenal</h2>
+</div>
+<div class="flex gap-4">
+<button class="font-code-label text-code-label uppercase text-primary border-b-2 border-primary pb-1">Troops</button>
+<button class="font-code-label text-code-label uppercase text-on-surface-variant hover:text-primary transition-colors pb-1">Heroes</button>
+<button class="font-code-label text-code-label uppercase text-on-surface-variant hover:text-primary transition-colors pb-1">Spells</button>
+<button class="font-code-label text-code-label uppercase text-on-surface-variant hover:text-primary transition-colors pb-1">Pets</button>
+</div>
+</div>
+<div class="p-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-6">
+<!-- Individual Troop Cards -->
+<div class="flex flex-col items-center gap-3 group">
+<div class="relative w-full aspect-square glass-card rounded-xl p-3 group-hover:pro-card transition-all cursor-pointer overflow-hidden">
+<img alt="Barbarian" class="w-full h-full object-contain filter drop-shadow-[0_0_10px_rgba(0,219,231,0.2)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIYHFuOTHfj4zaGzoYhiVrfGtS6I6lgcO5R76Sj4DPEkZgQe2gA-VqsoE0jzFfYcArx7k-oQFUAupPyqWjAcWXqQHWg5K43ii3Qi1N7KXusaaOPoM9p6w_n3LurZVF6BmqYXV7CQRxe_2dunEBaiPocyNZK-LHLPG9vNyMGyXFKIaK5SFO8WJs8BSzWoozLTuVyb2im9EMRpt-DbbdsuMwWblt0YENlMlnAL6kZz9R60jJ6FjlXCT5mLxAdhaiy6i4hP7xPFvnVu85"/>
+<div class="absolute bottom-1 right-1 bg-surface-container-highest px-1.5 py-0.5 rounded font-code-label text-[10px] text-primary border border-primary/20">LVL 12</div>
+</div>
+<p class="font-code-label text-[11px] text-on-surface uppercase">Barbarian</p>
+</div>
+<div class="flex flex-col items-center gap-3 group">
+<div class="relative w-full aspect-square glass-card rounded-xl p-3 group-hover:pro-card transition-all cursor-pointer">
+<img alt="Archer" class="w-full h-full object-contain filter drop-shadow-[0_0_10px_rgba(0,219,231,0.2)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLJizGvYkFRDmNMzFROs5pSFrXw50wMuuvEYkkcql4_nOnAhBZ2hI_W-zq5YbKlzp1o1V_RkKGlxzopuExCiO-S3NPf_xE1BBEDQOWmETRV9i8e5o9zKxRYUKTNyuJHrtONPHcKZEBLD4LjEWKAhexaqli3QuhDgTU6mxzscC8Ucs8ea4RmBj0KKKGnuK1-zAmuJ9f5Dy8cC1WI21ttLy8T5XKnUvx66obyT3j3LtlA4vorrRpCge2E2o10Vh92X-Ef6-1rBsAm62h"/>
+<div class="absolute bottom-1 right-1 bg-surface-container-highest px-1.5 py-0.5 rounded font-code-label text-[10px] text-primary border border-primary/20">LVL 11</div>
+</div>
+<p class="font-code-label text-[11px] text-on-surface uppercase">Archer</p>
+</div>
+<div class="flex flex-col items-center gap-3 group">
+<div class="relative w-full aspect-square glass-card rounded-xl p-3 group-hover:pro-card transition-all cursor-pointer">
+<div class="absolute inset-0 bg-primary/5 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-4xl animate-pulse">upgrade</span>
+</div>
+<img alt="Giant" class="w-full h-full object-contain opacity-50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu7rRCWhlRw7HPImPKkAI_72qsPkU5Qjmuprw-yEcwoPA9eeHWA28vOwTdYSU3t6aCKJzvXhzyXcaf_bfsHveC9vzzYtn4SgXtN7zazebOR43teEqGBQ614CF4-qSgPk6xDbVDzu5dj-mBVF2LBAe7XNuKr89d9ng0LD2NHG-gMO_QS2HhG2mUB47JK-9NWjiynYN1Z-AWFpe1-qMAgduXAXPBBR5qAL8qPYEuQaUlMtCdNbiApsjILWNn3dxW_fvuMi99ZskkzOFK"/>
+<div class="absolute bottom-1 right-1 bg-secondary px-1.5 py-0.5 rounded font-code-label text-[10px] text-on-secondary-fixed">UPGRADING</div>
+</div>
+<p class="font-code-label text-[11px] text-on-surface uppercase">Giant</p>
+</div>
+<div class="flex flex-col items-center gap-3 group">
+<div class="relative w-full aspect-square glass-card rounded-xl p-3 pro-card">
+<img alt="Dragon" class="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(255,204,0,0.4)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOziRD1-JFtflxESN60Nxs9VsFk6_oDxQq4v53J5Va8YYYmPIel6PIKgAr1KNRSs9GG0L7hxix8n2fz8TYcxa98cGHvxGJNWx4xlE-8F_jXrDcRUKuHdpYdaE3zjYfEtjVxB3YwGE5MyBgMe9kak-kzJCzU4ILFEVvZ3-iFVHO_ecAXBUGZOv0tbxCifW-UMrHbnEThWmiLGLsSWwuiaqgwbWnFs9C34nfh_0LsAGq-jbxG8wwenhu8AH2gbVvwerRAe7nyzeEzk_I"/>
+<div class="absolute bottom-1 right-1 bg-[#ffcc00] px-1.5 py-0.5 rounded font-code-label text-[10px] text-black font-bold">MAX</div>
+</div>
+<p class="font-code-label text-[11px] text-[#ffcc00] uppercase">Electro Dragon</p>
+</div>
+<!-- Repeated patterns for grid layout -->
+<div class="flex flex-col items-center gap-3 group">
+<div class="relative w-full aspect-square glass-card rounded-xl p-3 group-hover:pro-card transition-all cursor-pointer">
+<img alt="Wall Breaker" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCww_rwnIOIOyaH4NldEtFMM7A05zXDvn6gMTO1BjIu-q2W9RIhZnkQgdXU0NDjC4ysQH5vfzZe3NSDFEpnHTyNYvHtCTqo3YS5nezhEUH7pnGeEEojRnnmqzsTEIJtvs2MyWN5pEJ5Th_ri28_WCKPAyYEaaOkn1icD1Xaj-4sOGub9_ACELh9lWI8B5v55ruePBQZ9DWE_DQ1V132O9-Sl00a7_LDLBvGPtUiUh0I8LFVJZKokn8eKFJev_D8FcjasMUEe_-6mIf"/>
+<div class="absolute bottom-1 right-1 bg-surface-container-highest px-1.5 py-0.5 rounded font-code-label text-[10px] text-primary">LVL 11</div>
+</div>
+<p class="font-code-label text-[11px] text-on-surface uppercase">Wall Breaker</p>
+</div>
+<div class="flex flex-col items-center gap-3 group">
+<div class="relative w-full aspect-square glass-card rounded-xl p-3 pro-card">
+<img alt="Wizard" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQDvkF3LawXEHK1L8j720UVqwPEevzvcrGJDaFtcZ5HuDpvl0gxhJ6vdANfvFqK-SrvD8-YCA25ExFB4zStrS49Ww-t4-gnJeMWak-ge-3z059Hw0ljkOqcgWhZDmyxwGNgWoP49HOjHk6yaEl8jsFS1mxOn9YfAdOAmNfJkqYYN5WKyy0YM6CHAIUA7y_ai6UTW7SxNqN4Bx_O2MbmZG-Yr7NpCNH76EqbG5_0lUSa3o9fOLiehVPQcs53ouWO_xdZSiWBG85hJAJ"/>
+<div class="absolute bottom-1 right-1 bg-[#ffcc00] px-1.5 py-0.5 rounded font-code-label text-[10px] text-black font-bold">MAX</div>
+</div>
+<p class="font-code-label text-[11px] text-on-surface uppercase">Wizard</p>
+</div>
+<div class="flex flex-col items-center gap-3 group">
+<div class="relative w-full aspect-square glass-card rounded-xl p-3 group-hover:pro-card transition-all cursor-pointer">
+<img alt="Healer" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR3s_KEuXgcPq6Xv0mIJq5xunBBAIobTm0DDXwv3CFxbkG2tvikgkkDJWx_EaAaOaxKqoYQyUVZBsl27EK1LdVUW2np04QOwnn7FhHPgDBllXB12po3-Y6DU0W0nSPoCFIWVJ9CiJvldNedU2OeJs8Gy0pbfUe6n030-C8-Qjdq0_acONSXJ7KabPTtgZvZPRn3656aiFSvIMJmwq9xdmNfg3je5I4GsfFPLWKg4MZG41-89179QCtdudfG1qg5jT5EDRYGJT9rany"/>
+<div class="absolute bottom-1 right-1 bg-surface-container-highest px-1.5 py-0.5 rounded font-code-label text-[10px] text-primary">LVL 8</div>
+</div>
+<p class="font-code-label text-[11px] text-on-surface uppercase">Healer</p>
+</div>
+<div class="flex flex-col items-center gap-3 group">
+<div class="relative w-full aspect-square glass-card rounded-xl p-3 group-hover:pro-card transition-all cursor-pointer">
+<img alt="P.E.K.K.A" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnnlu4c6RBJyrnxuUU_O2H69y6QbuKOQGvqS5fklG1Qwm22IbQTb1qxeGBevNkCQ2BXBAXP2SzLY2fl80_fLIZfHodXA3Qmb5JOXke4vsuSiaRm-Vs8PG9hVwFc97DQ2AZcOg3pwcB7IrMeocC5GFg9y1XDaf7CFbX3zgsmzVhBl7eD6Z02F-l_LunWp_C7s4gZXd9lW7WjKIZWVpqTCDn9c-RwDVF8cilVTe0gll0zMqgiwRMjPnMmUS3ZgiF3czDJTkwALWosYGK"/>
+<div class="absolute bottom-1 right-1 bg-surface-container-highest px-1.5 py-0.5 rounded font-code-label text-[10px] text-primary">LVL 10</div>
+</div>
+<p class="font-code-label text-[11px] text-on-surface uppercase">P.E.K.K.A</p>
+</div>
+</div>
+</section>
+<!-- Recent Attacks Log -->
+<section class="col-span-12 lg:col-span-12 glass-card rounded-2xl p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-lg-mobile text-[18px] text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">history</span>
+                        Recent Attack Performance
+                    </h3>
+<button class="font-code-label text-[12px] text-primary hover:underline uppercase">View Full Log</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-white/10">
+<th class="py-4 font-code-label text-[10px] text-on-surface-variant uppercase">Opponent</th>
+<th class="py-4 font-code-label text-[10px] text-on-surface-variant uppercase">Result</th>
+<th class="py-4 font-code-label text-[10px] text-on-surface-variant uppercase">Destruction</th>
+<th class="py-4 font-code-label text-[10px] text-on-surface-variant uppercase">Loot Gained</th>
+<th class="py-4 font-code-label text-[10px] text-on-surface-variant uppercase">Trophies</th>
+<th class="py-4 text-right"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center text-on-surface font-bold">K</div>
+<div>
+<p class="font-body-main text-sm font-medium">KingSlayer</p>
+<p class="text-[10px] text-on-surface-variant">2 hours ago</p>
+</div>
+</div>
+</td>
+<td class="py-4">
+<div class="flex gap-1 text-secondary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</td>
+<td class="py-4 font-code-label text-primary">100%</td>
+<td class="py-4 font-code-label text-on-surface">840k Gold / 720k Elixir</td>
+<td class="py-4 font-code-label text-primary">+32</td>
+<td class="py-4 text-right">
+<button class="px-4 py-1.5 bg-white/5 border border-white/10 rounded-lg text-[10px] uppercase font-bold hover:bg-primary hover:text-on-primary transition-all">Replay</button>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center text-on-surface font-bold">N</div>
+<div>
+<p class="font-body-main text-sm font-medium">Nexus_Prime</p>
+<p class="text-[10px] text-on-surface-variant">5 hours ago</p>
+</div>
+</div>
+</td>
+<td class="py-4">
+<div class="flex gap-1 text-secondary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm">star</span>
+</div>
+</td>
+<td class="py-4 font-code-label text-primary">78%</td>
+<td class="py-4 font-code-label text-on-surface">1.2M Gold / 1.1M Elixir</td>
+<td class="py-4 font-code-label text-primary">+21</td>
+<td class="py-4 text-right">
+<button class="px-4 py-1.5 bg-white/5 border border-white/10 rounded-lg text-[10px] uppercase font-bold hover:bg-primary hover:text-on-primary transition-all">Replay</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-8 mt-auto bg-surface-container-lowest border-t border-outline-variant flex flex-col md:flex-row justify-between items-center px-margin-desktop gap-gutter">
+<div class="flex flex-col gap-2">
+<span class="font-headline-lg text-primary text-[24px]">Clash Insight</span>
+<p class="font-body-main text-body-main text-on-surface-variant">© 2024 Clash Insight Analytics. Data-driven tactical advantage.</p>
+</div>
+<div class="flex gap-6">
+<a class="font-body-main text-on-surface-variant hover:text-secondary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-main text-on-surface-variant hover:text-secondary transition-colors" href="#">Terms of Service</a>
+<a class="font-body-main text-on-surface-variant hover:text-secondary transition-colors" href="#">API Status</a>
+<a class="font-body-main text-on-surface-variant hover:text-secondary transition-colors" href="#">Global Rankings</a>
+</div>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full h-16 bg-surface/80 backdrop-blur-xl border-t border-white/10 flex justify-around items-center z-50">
+<button class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-code-label">OVERVIEW</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="text-[10px] font-code-label">ANALYTICS</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">swords</span>
+<span class="text-[10px] font-code-label">WAR</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-code-label">PROFILE</span>
+</button>
+</nav>
+</body></html>
